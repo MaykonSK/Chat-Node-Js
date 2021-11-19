@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="pt-br">
+  <head>
+    <title>Chat</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <style>
+        body {
+            background-color: #393939;
+        }
+        #chat {
+            min-height: 500px;
+            max-height: 500px;
+            padding: 5px;
+            background-color: #807E7E;
+            color: white;
+            overflow-y: scroll;
+            margin-bottom: 10px;
+            border-radius: 20px;
+        }
+        .barra {
+          display: flex;
+          flex-direction: row;
+          justify-content: space-between;
+          margin-bottom: 5px;
+        }
+        .caixaMsg {
+          width: 85%;
+          background: #B4B6B8;
+          color: black;
+          border: 1px solid #eee;
+          border-radius: 20px;
+          box-shadow: 5px 5px 5px #eee;
+          text-shadow:none;
+        }
+        .btnMsg {
+          width: 15%;
+          background: #016ABC;
+          color: #fff;
+          border: 1px solid #eee;
+          border-radius: 20px;
+          box-shadow: 5px 5px 5px #eee;
+          text-shadow:none;
+        }
+    </style>
+  </head>
+  <body>
+      <div class="container">
+        <p class="text-white" id="id_usuario"></p>
+      <div id="chat">
+
+      </div>   
+       <div class="barra">
+        <!-- <input type="text" name="" id="username" placeholder="Nome" class="form-control"><br> -->
+        <input type="text" name="" id="msg" placeholder="Mensagem" class="caixaMsg">
+        <button onclick="enviar()" class="btnMsg">Enviar</button>
+        <!-- <button onclick="enviar()" class="btn btn-primary btn-lg btn-block">Enviar</button> -->
+      </div>
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <!-- importar cdn do socket.io -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.3.2/socket.io.js"></script>
+    <script>
+        // var socket = io('http://143.198.7.229/');
+        var socket = io('http://localhost');
+
+        console.log(socket)
+
+        //evento de desconexao
+        socket.on('disconnect', () => {
+            
+        })
+
+
+        socket.on('showmsg', dados => {
+            console.log(dados)
+
+            //receber id da div chat
+             var chat = document.getElementById("chat");
+
+            //criar paragrafo para cada msg
+            var p = document.createElement("p")
+
+            p.innerHTML = "<b>Visitante</b>"+": "+dados.msg;
+
+            //adicionar um paragrafo dentro do chat
+            chat.append(p);
+        })
+
+
+
+    function enviar() {
+        // var nome = document.getElementById('username');
+        var mensagem = document.getElementById('msg');
+
+        // var username = nome.value;
+        var msg = mensagem.value;
+
+        // socket.emit('msg', {msg: msg, username: username});
+        socket.emit('msg', {msg: msg});
+
+        document.getElementById('msg').value=''; // Limpa o campo
+
+        var objDiv = document.getElementById("chat");
+        objDiv.scrollTop = objDiv.scrollHeight;
+    }
+
+</script>
+  </body>
+</html>
